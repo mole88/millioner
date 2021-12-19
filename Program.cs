@@ -10,7 +10,7 @@ namespace SovelevCore
 {
     class Program
     {
-        private static readonly string token = "1437863203:AAHcFls_4vW_rnWIv1V3ekKFltxBDA-7Q40";
+        private static readonly string token = "1437863203:AAFYxCY9fFLhrM5ZGDOUhCKDjv_02gupMfg";
         private static TelegramBotClient botClient;
 
         private static IReplyMarkup lastKeyb;

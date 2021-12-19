@@ -16,3 +16,11 @@ C:\Users\gospo\Desktop\C#\SovelevCore\SovelevCore\obj\Debug\net5.0\SovelevCore.d
 C:\Users\gospo\Desktop\C#\SovelevCore\SovelevCore\obj\Debug\net5.0\ref\SovelevCore.dll
 C:\Users\gospo\Desktop\C#\SovelevCore\SovelevCore\obj\Debug\net5.0\SovelevCore.pdb
 C:\Users\gospo\Desktop\C#\SovelevCore\SovelevCore\obj\Debug\net5.0\SovelevCore.genruntimeconfig.cache
+C:\Users\gospo\Desktop\C#\SovelevCore\SovelevCore\bin\Debug\net5.0\quests.json
+C:\Users\gospo\Desktop\C#\SovelevCore\SovelevCore\bin\Debug\net5.0\Users\user922138766.txt
+C:\Users\gospo\Desktop\C#\SovelevCore\SovelevCore\bin\Debug\net5.0\Users\user971133530.txt
+C:\Users\gospo\Desktop\C#\SovelevCore\SovelevCore\bin\Debug\net5.0\Sounds\hello-new-punter-2008-long.ogg
+C:\Users\gospo\Desktop\C#\SovelevCore\SovelevCore\bin\Debug\net5.0\Sounds\q1-5-bed-2008.ogg
+C:\Users\gospo\Desktop\C#\SovelevCore\SovelevCore\bin\Debug\net5.0\Sounds\total-winnings-strap.ogg
+C:\Users\gospo\Desktop\C#\SovelevCore\SovelevCore\bin\Debug\net5.0\Users\user1051958206.txt
+C:\Users\gospo\Desktop\C#\SovelevCore\SovelevCore\obj\Debug\net5.0\SovelevCore.csproj.CopyComplete
