@@ -27,7 +27,7 @@ namespace SovelevCore
             botClient = new TelegramBotClient(token);
             botClient.OnMessage += BotClient_OnMessage;
 
-            quiz = JsonConvert.DeserializeObject<Quiz>(File.ReadAllText(@"./SovelevCore"));
+            //quiz = JsonConvert.DeserializeObject<Quiz>(File.ReadAllText(@"./SovelevCore"));
 
             botClient.StartReceiving();
             Console.ReadLine();
