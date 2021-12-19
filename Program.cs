@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using Telegram.Bot;
 using Telegram.Bot.Types.ReplyMarkups;
 
@@ -30,8 +31,7 @@ namespace SovelevCore
             quiz = JsonConvert.DeserializeObject<Quiz>(File.ReadAllText(@"quests.json"));
 
             botClient.StartReceiving();
-            Console.ReadLine();
-            botClient.StopReceiving();
+            Task.Delay(int.MaxValue);
         }
 
         private static async void BotClient_OnMessage(object sender, Telegram.Bot.Args.MessageEventArgs e)
