@@ -27,7 +27,7 @@ namespace SovelevCore
             botClient = new TelegramBotClient(token);
             botClient.OnMessage += BotClient_OnMessage;
 
-            //quiz = JsonConvert.DeserializeObject<Quiz>(File.ReadAllText(@"./SovelevCore"));
+            quiz = JsonConvert.DeserializeObject<Quiz>(File.ReadAllText(@"quests.json"));
 
             botClient.StartReceiving();
             Console.ReadLine();
@@ -43,12 +43,12 @@ namespace SovelevCore
                 lastKeyb = GetButtons(new List<string> { "Начать" });
                 await botClient.SendTextMessageAsync(msg.Chat.Id, "Приветствую. Этот бот - игра \"Кто хочет стать миллионером\".", replyMarkup: lastKeyb);
 
-                using var stream = File.OpenRead(@"..\..\..\Sounds\hello-new-punter-2008-long.ogg");
+                using var stream = File.OpenRead(@"Sounds\hello-new-punter-2008-long.ogg");
                 await botClient.SendVoiceAsync(msg.Chat.Id, stream, duration: 16);
             }
             else if (msg.Text == "Начать" && state == 000)
             {
-                File.AppendAllText($@"..\..\..\Users\user{msg.From.Id}.txt", $"{msg.From}\n{msg.From.FirstName} {msg.From.LastName}\n{msg.Date + TimeSpan.FromHours(3)}\n\n");
+                File.AppendAllText($@"Users\user{msg.From.Id}.txt", $"{msg.From}\n{msg.From.FirstName} {msg.From.LastName}\n{msg.Date + TimeSpan.FromHours(3)}\n\n");
 
                 lastKeyb = GetButtons(new List<string> { "Понятно" });
                 await botClient.SendTextMessageAsync(msg.Chat.Id, "Для того, чтобы заработать 3 миллиона рублей," +
@@ -62,7 +62,7 @@ namespace SovelevCore
                 await botClient.SendTextMessageAsync(msg.Chat.Id, "Команда \"Сначала\" начнет все сначала😦");
                 await botClient.SendTextMessageAsync(msg.Chat.Id, "А еще, для полного погружения в игру советуется включить музыку из этой телепередачи🤗", replyMarkup: lastKeyb);
 
-                using (var stream = File.OpenRead(@"..\..\..\Sounds\q1-5-bed-2008.ogg"))
+                using (var stream = File.OpenRead(@"Sounds\q1-5-bed-2008.ogg"))
                     await botClient.SendVoiceAsync(msg.Chat.Id, stream, duration: 250);
 
                 fiftyfHelp = 1;
@@ -115,7 +115,7 @@ namespace SovelevCore
                 if (currentQuest.Index == 15)
                 {
                     await botClient.SendTextMessageAsync(msg.Chat.Id, $"Мои поздравления! Вы прошли игру!", replyMarkup: GetButtons(new List<string> { "Сначала" }));
-                    using var stream = File.OpenRead(@"..\..\..\Sounds\total-winnings-strap.ogg");
+                    using var stream = File.OpenRead(@"Sounds\total-winnings-strap.ogg");
                     await botClient.SendVoiceAsync(msg.Chat.Id, stream, duration: 10);
                 }
                 else NextQuest(msg);
