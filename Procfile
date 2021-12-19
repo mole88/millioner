@@ -1,1 +1,1 @@
-SovelevCore
+worker: SovelevCore
