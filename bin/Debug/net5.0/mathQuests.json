@@ -2,15 +2,15 @@
   "quests": [
     {
       "Question": "Площадь куба?",
-      "Answers": [ "S = a² + b²", "S = a²", "S = a * b", "2(a + b)"],
+      "Answers": [ "S = a² + b²", "S = a³", "S = a * b", "2(a + b)" ],
       "RightAnswer": "S = a²",
       "Prize": 500,
       "Index": 1
     },
     {
       "Question": "Площадь квадрата?",
-      "Answers": [ "S = a * b", "S = a + b + c", "S = 2(a + b)", "S = (a + b)²" ],
-      "RightAnswer": "S = a * b",
+      "Answers": [ "S = a * b", "S = a²", "S = 2(a + b)", "S = (a + b)²" ],
+      "RightAnswer": "S = a²",
       "Prize": 500,
       "Index": 1
     },
@@ -38,7 +38,7 @@
     {
       "Question": "Сколько всего чисел?",
       "Answers": [ "10", "9", "∞", "2" ],
-      "RightAnswer": "S = 4πr²",
+      "RightAnswer": "∞",
       "Prize": 2000,
       "Index": 3
     },
