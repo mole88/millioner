@@ -24,6 +24,9 @@ namespace SovelevCore
         private static int fiftyfHelp;
         private static int changeQuest;
 
+        private static int missHelp;
+        private static bool canMiss = false;
+
         private static int state;
 
         private static int fireproofAmount = 0;
@@ -64,7 +67,7 @@ namespace SovelevCore
 
                 if (currentQuest.Index == 15)
                 {
-                    await botClient.SendTextMessageAsync(ID, $"Мои поздравления! Вы прошли игру!", replyMarkup: GetButtons(new List<string> { "Сначала" }));
+                    await botClient.SendTextMessageAsync(ID, "Мои поздравления! Вы прошли игру!", replyMarkup: GetButtons(new List<string> { "Сначала" }));
                     using var stream = File.OpenRead(@"Sounds/total-winnings-strap.ogg");
                     await botClient.SendVoiceAsync(ID, stream, duration: 10);
                 }
@@ -73,6 +76,13 @@ namespace SovelevCore
             }
             else if (state >= 101 && currentQuest.Answers.Contains(msg.Text))
             {
+                if (canMiss)
+                {
+                    await botClient.SendTextMessageAsync(ID, "Не правильный ответ! Попытайтесь еще раз.");
+                    RepeatQuest();
+                    return;
+                }
+
                 lastKeyb = GetButtons(new List<string> { "Сначала" });
                 await botClient.SendTextMessageAsync(ID, $"Не правильно!!!!\nПравильный ответ - {currentQuest.RightAnswer}", replyMarkup: lastKeyb);
                 
@@ -80,52 +90,46 @@ namespace SovelevCore
                     await botClient.SendTextMessageAsync(ID, $"Вы выиграли свою несгораемую сумму - {fireproofAmount}!!!!", replyMarkup: GetButtons(new List<string> { "Сначала" }));
                 return;
             }
-
-            switch (msg.Text.ToLower())
+            try
             {
-                case "/start":
-                    Start(msg);
-                    break;
-                case "начать":
-                    if (state == 000) Regulations(msg);
-                    break;
-                case "далее":
-                    if (state == 001) SelectQuiz(msg);
-                    break;
-                case "классический":
-                    if (state == 002)
-                    {
+                switch (msg.Text.ToLower())
+                {
+                    case "/start":
+                        Start(msg);
+                        break;
+                    case "начать":
+                        if (state == 000) Regulations();
+                        break;
+                    case "далее":
                         quiz = JsonConvert.DeserializeObject<Quiz>(File.ReadAllText(@"quests.json"));
-                        SetFireproofAmount(msg);
-                    }
-                    break;
-                case "математический":
-                    if (state == 002)
-                    {
-                        quiz = JsonConvert.DeserializeObject<Quiz>(File.ReadAllText(@"mathQuests.json"));
-                        SetFireproofAmount(msg);
-                    } 
-                    break;
-                case "сначала":
-                    ReStart(msg);
-                    break;
-                case "50 на 50":
-                    if (state >= 101) GetFifty(msg);
-                    break;
-                case "замена вопроса":
-                    if (state >= 101) ChangeQuest(msg);
-                    break;
+                        SetFireproofAmount();
+                        break;
+                    case "сначала":
+                        ReStart();
+                        break;
+                    case "⁇ 50 на 50 ⁇":
+                        if (state >= 101) GetFifty();
+                        break;
+                    case "⁇ замена вопроса ⁇":
+                        if (state >= 101) ChangeQuest();
+                        break;
+                    case "⁇ право на ошибку ⁇":
+                        if (state >= 101) GetMiss();
+                        break;
 
-                default:
-                    await botClient.SendTextMessageAsync(ID, "Ответ не распознан.", replyMarkup: lastKeyb);
-                    break;
+                    default:
+                        await botClient.SendTextMessageAsync(ID, "Ответ не распознан.", replyMarkup: lastKeyb);
+                        break;
+                }
             }
+            catch { Console.WriteLine("Ошибка блын"); };
         }
         private static async void Start(Telegram.Bot.Types.Message msg)
         {
             SendUser(msg);
             fiftyfHelp = 1;
             changeQuest = 1;
+            missHelp = 1;
             state = 000;
 
             lastKeyb = GetButtons(new List<string> { "Начать" });
@@ -134,9 +138,8 @@ namespace SovelevCore
             using var stream = File.OpenRead(@"Sounds/hello-new-punter-2008-long.ogg");
             await botClient.SendVoiceAsync(ID, stream, duration: 16);
         }
-        private static async void Regulations(Telegram.Bot.Types.Message msg)
+        private static async void Regulations()
         {
-            lastKeyb = GetButtons(new List<string> { "Понятно" });
             await botClient.SendTextMessageAsync(ID, "Для того, чтобы заработать 3 миллиона рублей," +
                 " необходимо правильно ответить на 15 вопросов из различных областей знаний." +
                 " Каждый вопрос имеет 4 варианта ответа, из которых только один является верным." +
@@ -158,19 +161,19 @@ namespace SovelevCore
             state = 101;
             fiftyfHelp = 1;
             changeQuest = 1;
+            missHelp = 1;
             NextQuest();
         }
-        private static async void ReStart(Telegram.Bot.Types.Message msg)
+        private static async void ReStart()
         {
-            await botClient.SendTextMessageAsync(ID, "Произошло обнуление...", replyMarkup: GetButtons(new List<string> { "Понятно" }));
-            SelectQuiz(msg);
+            await botClient.SendTextMessageAsync(ID, "Произошло обнуление...", replyMarkup: GetButtons(new List<string> { "Далее" }));
         }
-        private static async void GetFifty(Telegram.Bot.Types.Message msg)
+        private static async void GetFifty()
         {
             if (fiftyfHelp > 0)
             {
                 fiftyfHelp--;
-                Random random = new Random();
+                Random random = new();
                 var newAnswers = new List<string>
                     {
                         currentQuest.Answers.Where(a => a != currentQuest.RightAnswer).ToList()[random.Next(currentQuest.Answers.Length - 1)],
@@ -182,7 +185,7 @@ namespace SovelevCore
             }
             else await botClient.SendTextMessageAsync(ID, "50 на 50 не осталось(", replyMarkup: lastKeyb);
         }
-        private static async void ChangeQuest(Telegram.Bot.Types.Message msg)
+        private static async void ChangeQuest()
         {
             if (changeQuest > 0)
             {
@@ -193,12 +196,17 @@ namespace SovelevCore
             }
             else await botClient.SendTextMessageAsync(ID, "Замены впороса не осталось(", replyMarkup: lastKeyb);
         }
-        private static async void SelectQuiz(Telegram.Bot.Types.Message msg)
+        private static async void GetMiss()
         {
-            await botClient.SendTextMessageAsync(ID, "Выберите режим игры", replyMarkup: GetButtons(new List<string> {"Классический", "Математический"}, 2, 1));
-            state = 002;
+            if (missHelp > 0)
+            {
+                missHelp--;
+                canMiss = true;
+                RepeatQuest();
+            }
+            else await botClient.SendTextMessageAsync(ID, "Права на ошибку не осталось не осталось(", replyMarkup: lastKeyb);
         }
-        private static async void SetFireproofAmount(Telegram.Bot.Types.Message msg)
+        private static async void SetFireproofAmount()
         {
             isFireproofSetting = true;
             InlineKeyboardMarkup InlineKeyboardMarkup = new(new[]
@@ -243,6 +251,11 @@ namespace SovelevCore
 
             Console.WriteLine($"Вопрос {currentQuest.Index}: \n{currentQuest.Question}");
         }
+        private static async void RepeatQuest()
+        {
+            lastKeyb = GetButtons(new List<string> { currentQuest.Answers[0], currentQuest.Answers[1], currentQuest.Answers[2], currentQuest.Answers[3] }, 2, 2, true);
+            await botClient.SendTextMessageAsync(ID, $"Вопрос {currentQuest.Index}: \n{currentQuest.Question}", replyMarkup: lastKeyb);
+        }
         private static IReplyMarkup GetButtons(List<string> answers, int cols = 1, int rows = 1, bool getHelpButtons = false)
         {
             var keyb = new List<List<KeyboardButton>>();
@@ -259,11 +272,16 @@ namespace SovelevCore
                 }
                 if (answers.Count == 0) break;
             }
-            if (getHelpButtons && (fiftyfHelp > 0 | changeQuest > 0))
+            if (getHelpButtons && (fiftyfHelp > 0 | changeQuest > 0 | missHelp > 0))
             {
                 keyb.Add(new List<KeyboardButton>());
-                if (fiftyfHelp > 0) keyb[cols].Add(new KeyboardButton($"50 на 50"));
-                if (changeQuest > 0) keyb[cols].Add(new KeyboardButton($"Замена вопроса"));
+                if (fiftyfHelp > 0) keyb[cols].Add(new KeyboardButton("⁇ 50 на 50 ⁇"));
+                if (changeQuest > 0) keyb[cols].Add(new KeyboardButton("⁇ Замена вопроса ⁇"));
+                if (missHelp > 0)
+                {
+                    keyb.Add(new List<KeyboardButton>());
+                    keyb[cols + 1].Add(new KeyboardButton("⁇ Право на ошибку ⁇"));
+                }
             }
             return new ReplyKeyboardMarkup(keyb, true);
         }
