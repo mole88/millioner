@@ -80,6 +80,7 @@ namespace SovelevCore
                 {
                     await botClient.SendTextMessageAsync(ID, "Не правильный ответ! Попытайтесь еще раз.");
                     RepeatQuest();
+                    canMiss = false;
                     return;
                 }
 
@@ -228,7 +229,8 @@ namespace SovelevCore
                 new [] { InlineKeyboardButton.WithCallbackData(text: "3 000 000", callbackData: "3000000") }
             });
 
-            await botClient.SendTextMessageAsync(ID, "Выбирете несгораемую сумму(та на которую вы расчитываете)", replyMarkup: InlineKeyboardMarkup);
+            await botClient.SendTextMessageAsync(ID, "Выбирете несгораемую сумму(та на которую вы расчитываете)", replyMarkup: new ReplyKeyboardRemove());
+            await botClient.SendTextMessageAsync(ID, "(та на которую вы расчитываете)", replyMarkup: InlineKeyboardMarkup);
 
             state = 003;
         }
