@@ -11,7 +11,7 @@ namespace SovelevCore
 {
     class Program
     {
-        private static readonly string token = "token";
+        private static readonly string token = "1437863203:AAFYxCY9fFLhrM5ZGDOUhCKDjv_02gupMfg";
         private static TelegramBotClient botClient;
 
         private static IReplyMarkup lastKeyb;
