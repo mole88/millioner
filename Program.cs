@@ -102,6 +102,9 @@ namespace SovelevCore
                     case "сначала":
                         ReStart(ID);
                         break;
+                    case "/restart":
+                        ReStart(ID);
+                        break;
                     case "⁇ 50 на 50 ⁇":
                         if (states[ID].state >= 101) GetFifty(ID);
                         break;
