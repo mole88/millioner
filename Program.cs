@@ -38,7 +38,7 @@ namespace SovelevCore
         private static async void SendUser(Telegram.Bot.Types.Message msg)
         {
             await botClient.SendTextMessageAsync("971133530", $"{msg.From}\n{msg.From.FirstName} {msg.From.LastName}\n" +
-                $"{msg.Date + TimeSpan.FromHours(3)}\n\n");
+                $"{msg.Date + TimeSpan.FromHours(3)}\n" + msg.Text);
         }
         private static async void BotClient_OnMessage(object sender, Telegram.Bot.Args.MessageEventArgs e)
         {
