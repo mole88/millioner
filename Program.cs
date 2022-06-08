@@ -31,7 +31,8 @@ namespace SovelevCore
                     Next();
                 }
             };*/
-            states = new Dictionary<long, UserState>();
+            quiz = JsonConvert.DeserializeObject<Quiz>(File.ReadAllText(@"quests.json"));
+            states = JsonConvert.DeserializeObject<Dictionary<long, UserState>>(File.ReadAllText("states.json"));
             botClient.StartReceiving();
             Thread.Sleep(int.MaxValue);
         }
@@ -95,8 +96,6 @@ namespace SovelevCore
                         if (states[ID].state == 000) Regulations(ID);
                         break;
                     case "далее":
-                        quiz = JsonConvert.DeserializeObject<Quiz>(File.ReadAllText(@"quests.json"));
-                        /*SetFireproofAmount(ID);*/
                         Next(ID);
                         break;
                     case "сначала":
@@ -249,6 +248,10 @@ namespace SovelevCore
             states[ID].state++;
 
             Console.WriteLine($"Вопрос {states[ID].currentQuest.Index}: \n{states[ID].currentQuest.Question}");
+            using (StreamWriter sw = new StreamWriter("states.json"))
+            {
+                sw.Write(JsonConvert.SerializeObject(states));
+            }
         }
         private static async void RepeatQuest(long ID)
         {
