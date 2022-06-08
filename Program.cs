@@ -32,6 +32,9 @@ namespace SovelevCore
                 }
             };*/
             quiz = JsonConvert.DeserializeObject<Quiz>(File.ReadAllText(@"quests.json"));
+
+            if (!File.Exists("states.json"))
+                File.Create("states.json").Close();
             states = JsonConvert.DeserializeObject<Dictionary<long, UserState>>(File.ReadAllText("states.json"));
             botClient.StartReceiving();
             Thread.Sleep(int.MaxValue);
